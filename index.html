@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Talk</title>
+    <style>html,body{margin:0;height:100%}</style>
+  </head>
+  <body>
+    <elevenlabs-convai id="el-widget"></elevenlabs-convai>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const agentId = params.get("agent_id");
+      const voiceId = params.get("voice_id");
+      const title = params.get("title");
+      const artist = params.get("artist");
+
+      const widget = document.getElementById("el-widget");
+
+      if (!agentId) {
+        document.body.innerHTML =
+          "<p style='padding:16px;font-family:sans-serif'>Missing agent_id. Add ?agent_id=...</p>";
+      } else {
+        widget.setAttribute("agent-id", agentId);
+        if (voiceId) widget.setAttribute("override-voice-id", voiceId);
+
+        const dyn = {};
+        if (title) dyn.title = title;
+        if (artist) dyn.artist = artist;
+        widget.setAttribute("dynamic-variables", JSON.stringify(dyn));
+        widget.setAttribute("markdown-link-allowed-hosts", "*");
+      }
+    </script>
+
+    <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+  </body>
+</html>
