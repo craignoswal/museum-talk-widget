@@ -11,16 +11,6 @@
         height: 100%;
         background: #fff;
       }
-      #wrap {
-        width: 100vw;
-        height: 100vh;
-      }
-      elevenlabs-convai {
-        display: block;
-        width: 100%;
-        height: 100%;
-      }
-      /* Simple fallback styling if agent_id is missing */
       #error {
         font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
         padding: 16px;
@@ -29,15 +19,16 @@
   </head>
 
   <body>
-    <div id="wrap">
-      <elevenlabs-convai id="el-widget"></elevenlabs-convai>
-    </div>
+    <!-- Default widget behavior (floating) -->
+    <elevenlabs-convai id="el-widget"></elevenlabs-convai>
 
     <script>
       const params = new URLSearchParams(window.location.search);
 
+      // REQUIRED
       const agentId = params.get("agent_id");
-      const voiceId = params.get("voice_id");
+
+      // OPTIONAL context for the agent to use (if your agent prompt references them)
       const title = params.get("title");
       const artist = params.get("artist");
 
@@ -49,16 +40,14 @@
       } else {
         widget.setAttribute("agent-id", agentId);
 
-        // Optional: per-artwork voice override
-        if (voiceId) widget.setAttribute("override-voice-id", voiceId);
-
-        // Optional: pass context into the agent as dynamic variables
+        // Pass optional context as dynamic variables
         const dyn = {};
         if (title) dyn.title = title;
         if (artist) dyn.artist = artist;
+
         widget.setAttribute("dynamic-variables", JSON.stringify(dyn));
 
-        // Optional: allow links in markdown
+        // Allow links in markdown responses
         widget.setAttribute("markdown-link-allowed-hosts", "*");
       }
     </script>
